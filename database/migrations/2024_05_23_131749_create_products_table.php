@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->text('photo');
             $table->decimal('price', 8, 2);
             $table->integer('stock_quanity');
             $table->unsignedBigInteger('brand_id');
