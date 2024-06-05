@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function home()
+    {
+        $products = Product::all();
+        return view('welcome', compact('products'));
+    }
     public function index()
     {
         $products = Product::with('brand', 'category')->get();
@@ -25,34 +30,64 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
+        //dd($request->all());
+       
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'brand_id' => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'stock_quantity' => 'required|integer',
         ]);
 
+        // $photoPath = null;
+
+        // if ($request->hasFile('photo')) {
+        //     $photoPath = $request->file('photo')->store('photos', 'public');
+        // } else {
+        //     $photoPath = null;
+        // }
+
+        // $create = Product::create([
+        //     'name' => $request->name,
+        //     'description' => $request->description,
+        //     'price' => $request->price,
+        //     'brand_id' => $request->brand_id,
+        //     'category_id' => $request->category_id,
+        //     'photo' => $request->photo,
+        //     'stock_quantity' => $request->stock_quantity,
+        // ]);
+
+        // $create = Product::create($request->all());
+
+
+        // $create->save();
+
+        // return redirect()->route('products.index')
+        //                  ->with('success', 'Product created successfully.');
+
+        $product = new Product();
+
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->brand_id = $request->brand_id;
+        $product->category_id = $request->category_id;
+        //$product->photo = $request->photo;
+        $product->stock_quantity = $request->stock_quantity;
+
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('photos', 'public');
-        } else {
-            $photoPath = null;
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/products'), $imageName);
+            $product->photo = $imageName;
         }
 
-        Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'brand_id' => $request->brand_id,
-            'category_id' => $request->category_id,
-            'photo' => $photoPath,
-            'stock_quantity' => $request->stock_quantity,
-        ]);
+        //$product.Save();
 
-        return redirect()->route('products.index')
-                         ->with('success', 'Product created successfully.');
+    return redirect()->route('admin.products.index')->with('success', 'Product added successfully.');
     }
 
     public function show(Product $product)
