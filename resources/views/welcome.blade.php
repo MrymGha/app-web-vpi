@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>e-com</title>
+        <title>TechMart</title>
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -21,7 +21,7 @@
                     <header>
                         <nav class="navbar navbar-expand-lg navbar-light bg-light">
                             <div class="container px-4 px-lg-5">
-                                <a class="navbar-brand" href="#!">Shop</a>
+                                <a class="navbar-brand" href="#!">TechMart</a>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -75,11 +75,12 @@
                                     </nav>
                                 @endif
                                     <form class="d-flex">
-                                        <button class="btn btn-outline-dark" type="submit">
-                                            <i class="bi-cart-fill me-1"></i>
-                                            Cart
-                                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                                        </button>
+                                
+                                        <a href="{{ route('cart.index') }}">
+                                            <i class="bi-cart-fill me-1"> <img src="{{ asset('images/shopping-cart.png') }}" width="35" height="35" alt=""></i>
+                                            {{-- Cart
+                                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span> --}}
+                                        </a>
                                     </form>
                                 </div>
                             </div>
@@ -88,8 +89,8 @@
                         <header class="bg-dark py-5">
                             <div class="container px-4 px-lg-5 my-5">
                                 <div class="text-center text-white">
-                                    <h1 class="display-4 fw-bolder">Shop in style</h1>
-                                    <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+                                    <h1 class="display-4 fw-bolder">Experience Tomorrow's Technology Today</h1>
+                                    <p class="lead fw-normal text-white-50 mb-0">Your One-Stop Tech Shop</p>
                                 </div>
                             </div>
                         </header>
@@ -105,11 +106,11 @@
                                         <div class="card h-100">
                                             <!-- Product image-->
                                             
-                                            @if ($product->image)
+                                            {{-- @if ($product->image) --}}
                                                 <img src="{{ asset('storage/' . $product->photo) }}" class="card-img-top" alt="{{ $product->name }}">
-                                            @else
+                                            {{-- @else
                                                 <img src="{{asset('images/products/imprimante.jpg')}}" class="card-img-top" alt="{{ $product->name }}">
-                                            @endif
+                                            @endif --}}
                                             <!-- Product details-->
                                             <div class="card-body p-4">
                                                 <div class="text-center">
@@ -120,10 +121,14 @@
                                                 </div>
                                             </div>
                                             <!-- Product actions-->
+                                            {{-- @auth --}}
+                                            <form method="POST" action="{{ route('cart.add', $product->id) }}">
+                                                @csrf
                                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                                                <div class="text-center"><button type="submit" class="btn btn-outline-dark mt-auto">Add to Cart</button></div>
                                             </div>
-                                            
+                                            </form>
+                                             {{-- @endauth --}}
                                         </div>
                                     </div>
                                     @endforeach
